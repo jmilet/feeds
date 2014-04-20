@@ -19,9 +19,14 @@ handle_cast(stop, State) ->
     {stop, normal, State}.
 
 handle_info({tcp, Socket, RawData}, State) ->
-    io:format("Text: ~p~n", [RawData]),
-    A = 1 /0,
+    %%io:format("Text: ~p~n", [RawData]),
     gen_tcp:send(Socket, RawData),
+    gen_tcp:close(Socket),
+    case RawData =:= "crash\r\n" of
+	true ->
+	    A = 1 /0;
+	false -> false
+    end,
     {noreply, State};
 handle_info({tcp_closed, _Socket}, State) ->
     {stop, normal, State};
