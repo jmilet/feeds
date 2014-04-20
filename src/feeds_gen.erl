@@ -1,6 +1,6 @@
 -module(feeds_gen).
 -behaviuour(gen_server).
--export([start_link/1, init/1, handle_info/2]).
+-export([start_link/1, init/1, handle_info/2, terminate/2, handle_cast/2]).
 
 -record(state, {lsocket}).
 
@@ -15,10 +15,18 @@ init([LSocket]) ->
     State = #state{lsocket = LSocket},
     {ok, State, 0}.
 
+handle_cast(stop, State) ->
+    {stop, normal, State}.
+
 handle_info({tcp, Socket, RawData}, State) ->
     io:format("Text: ~p~n", [RawData]),
+    A = 1 /0,
     gen_tcp:send(Socket, RawData),
     {noreply, State};
+handle_info({tcp_closed, _Socket}, State) ->
+    {stop, normal, State};
+handle_info({tcp_error, _Socket}, State) ->
+    {stop, normal, State};
 handle_info(timeout, State) ->
     LSocket = State#state.lsocket,
     io:format("Accepting socket~p~n", [LSocket]),
@@ -27,3 +35,5 @@ handle_info(timeout, State) ->
     feeds_sup:start_child(),
     {noreply, State}.
 
+terminate(_Reaseon, _State) ->
+    ok.

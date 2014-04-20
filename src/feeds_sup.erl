@@ -21,7 +21,7 @@ init([LSocket]) ->
 %% Private
 restart_strategy() ->
     %% How the workers should be restarted.
-    {simple_one_for_one, 0, 1}.
+    {simple_one_for_one, 3, 60}.
 
 
 worker_spec(LSocket) ->
@@ -40,4 +40,5 @@ worker_spec(LSocket) ->
                                      %% in this case, but it could has been another
                                      %% supervisor.
       [feeds_gen]}].                 %% One element list with the worker's module.
+
 
