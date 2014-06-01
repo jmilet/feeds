@@ -20,9 +20,8 @@ handle_cast(stop, State) ->
 
 handle_info({tcp, Socket, RawData}, State) ->
     case cleaned(string:tokens(RawData, "/")) of
-	["login", Usuario] ->
-	    Resultado = login(Usuario),
-	    gen_tcp:send(Socket, Resultado ++ "\n"),
+	["login", UserId, Password] ->
+	    gen_tcp:send(Socket, atom_to_list(login(UserId, Password)) ++ "\n"),
 	    {noreply, State};
 
 	["quit"] ->
@@ -49,8 +48,8 @@ handle_info(timeout, State) ->
 terminate(_Reaseon, _State) ->
     ok.
 
-login(Usuario) ->
-    "ok".
+login(UserId, Password) ->
+    login_gen:login(UserId, Password).
 
 cleaned(Tokens) ->
     lists:map(fun(T) -> re:replace(T, "\r\n", "", [{return, list}]) end, Tokens).
