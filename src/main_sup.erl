@@ -23,5 +23,12 @@ worker_spec(LSocket) ->
       temporary,
       1000,
       supervisor,
-      [tcp_sup]}].
+      [tcp_sup]},
+     {login_gen,
+      {login_gen, start_link, []},
+      temporary,
+      1000,
+      worker,
+      [login_gen]}
+    ].
 
