@@ -6,7 +6,7 @@
                                               %% in order to let the system detect
                                               %% registered names clashes
     {applications, [kernel, stdlib]},         %% Applications our app depends on
-    {mod, {feeds, [2000]}}                    %% Our main's application module and
+    {mod, {feeds_app, [2000]}}                %% Our main's application module and
                                               %% and the port number as parameter
                                               %% (in this case)
 ]}.

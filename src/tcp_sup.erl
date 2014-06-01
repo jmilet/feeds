@@ -29,8 +29,8 @@ restart_strategy() ->
 worker_spec(LSocket) ->
     %% How workers should be managed.
 
-    [{feeds_gen,                     %% A name for our worker spec.
-      {feeds_gen, start_link, [LSocket]},   %% The module, function and params of our workers.
+    [{tcp_gen,                       %% A name for our worker spec.
+      {tcp_gen, start_link, [LSocket]},   %% The module, function and params of our workers.
                                      %% Worker's execution entry point.
       temporary,                     %% How the worker should be restarted.
                                      %% transient means restart only if it abnormally
@@ -41,6 +41,6 @@ worker_spec(LSocket) ->
       worker,                        %% Defines a subordinate process type, a worker
                                      %% in this case, but it could has been another
                                      %% supervisor.
-      [feeds_gen]}].                 %% One element list with the worker's module.
+      [tcp_gen]}].                   %% One element list with the worker's module.
 
 
