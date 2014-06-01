@@ -6,5 +6,5 @@ compile:
 clean:
 	rm ebin/*.beam
 
-run:
+run: compile
 	erl -pa ebin

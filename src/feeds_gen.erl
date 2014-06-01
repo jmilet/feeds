@@ -20,8 +20,14 @@ handle_cast(stop, State) ->
 
 handle_info({tcp, Socket, RawData}, State) ->
     %%io:format("Text: ~p~n", [RawData]),
-    gen_tcp:send(Socket, RawData),
-    gen_tcp:close(Socket),
+    case string:tokens(RawData, "/") of
+	["login", Usuario] ->
+	    Resultado = login(Usuario);
+	_ ->
+	    Resultado = "Error"
+    end,
+    gen_tcp:send(Socket, Resultado ++ "\n"),
+    %%gen_tcp:close(Socket),
     case RawData =:= "crash\r\n" of
 	true ->
 	    A = 1 /0;
@@ -42,3 +48,6 @@ handle_info(timeout, State) ->
 
 terminate(_Reaseon, _State) ->
     ok.
+
+login(Usuario) ->
+    "ok".
