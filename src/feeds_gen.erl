@@ -43,7 +43,7 @@ handle_info(timeout, State) ->
     io:format("Accepting socket~p~n", [LSocket]),
     {ok, ASocket} = gen_tcp:accept(LSocket),
     io:format("After acceptint socket, asking for a new child process~n"),
-    feeds_sup:start_child(),
+    tcp_sup:start_child(),
     {noreply, State}.
 
 terminate(_Reaseon, _State) ->

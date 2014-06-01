@@ -1,4 +1,4 @@
--module(feeds_sup).
+-module(tcp_sup).
 -behaviour(supervisor).
 -export([start_link/1, init/1, start_child/0]).
 
@@ -6,8 +6,10 @@
 
 %% Public interface
 start_link(LSocket) ->
-    io:format("Starting feeds_sup...~n", []),
-    supervisor:start_link({local, ?SERVER}, ?MODULE, [LSocket]).
+    io:format("Starting tcp_sup...~n", []),
+    Sup = supervisor:start_link({local, ?SERVER}, ?MODULE, [LSocket]),
+    start_child(),
+    Sup.
 
 start_child() ->
     io:format("In start_child~n"),
@@ -15,7 +17,7 @@ start_child() ->
 
 %% Callbacks
 init([LSocket]) ->
-    io:format("Initating feeds_sup...~n", []),
+    io:format("Initating tcp_sup...~n", []),
     {ok, {restart_strategy(), worker_spec(LSocket)}}.
 
 %% Private

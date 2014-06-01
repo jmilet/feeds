@@ -4,12 +4,10 @@
 
 %% Public interface
 start(_Type, [Port]) ->
-    io:format("Starting feeds server...~p~n", [Port]),
+    io:format("Starting feeds app...~p~n", [Port]),
     {ok, LSocket} = gen_tcp:listen(Port, [{active, true}]),
-    Supervisor = feeds_sup:start_link(LSocket),
-    feeds_sup:start_child(),
-    Supervisor.
+    main_sup:start_link(LSocket).
 
 stop(_State) ->
-    io:format("Stopping feeds server...~n"),
+    io:format("Stopping feeds app...~n"),
     ok.
