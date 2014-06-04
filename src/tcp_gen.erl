@@ -1,6 +1,7 @@
 -module(tcp_gen).
 -behaviuour(gen_server).
 -export([start_link/1, init/1, handle_info/2, terminate/2, handle_cast/2]).
+-include("include/login_gen.hrl").
 
 -record(state, {lsocket}).
 
@@ -21,7 +22,9 @@ handle_cast(stop, State) ->
 handle_info({tcp, Socket, RawData}, State) ->
     case cleaned(string:tokens(RawData, "/")) of
 	["login", UserId, Password] ->
-	    gen_tcp:send(Socket, atom_to_list(login(UserId, Password)) ++ "\n"),
+	    {ok, User} = login_gen:login(UserId, Password),
+	    io:format("~p", [User]),
+	    gen_tcp:send(Socket, User#user.id ++ "\n"),
 	    {noreply, State};
 
 	["quit"] ->

@@ -7,4 +7,4 @@ clean:
 	rm ebin/*.beam
 
 run: compile
-	erl -pa ebin
+	erl -pa ebin -eval "application:start(feeds)"
