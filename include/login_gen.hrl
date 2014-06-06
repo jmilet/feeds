@@ -1,1 +1,1 @@
--record(user, {id, password, login = false}).
+-record(user, {id, password, login = false, urls = []}).

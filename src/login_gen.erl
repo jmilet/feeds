@@ -10,9 +10,8 @@
 %% Public interface
 start_link() ->
     io:format("Starting login_gen...~n", []),
-    UsersDB = dict:new(),
-    UsersDB2 = dict:store("guest", #user{id = "guest", password = "guest"}, UsersDB),
-    gen_server:start_link({local, ?SERVER}, ?MODULE, #state{users = UsersDB2}, []).
+    UsersDB = dict:store("guest", #user{id = "guest", password = "guest"}, dict:new()),
+    gen_server:start_link({local, ?SERVER}, ?MODULE, #state{users = UsersDB}, []).
 
 login(UserId, Password) ->
     io:format("--------------"),
@@ -30,10 +29,9 @@ handle_cast(stop, State) ->
 handle_info(timeout, State) ->
     {noreply, State}.
 
-handle_call({login, UserId, Password}, From, State) ->
+handle_call({login, UserId, Password}, _From, State) ->
     case dict:find(UserId, State#state.users) of
 	{ok, User} ->
-	    io:format("~p~p~n", [User, Password]),
 	    if User#user.password == Password ->
 		    {reply, {ok, User#user{login = true}}, State};
 	       true ->
